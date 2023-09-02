@@ -27,7 +27,7 @@ public class StartProduction {
         
         //let the producer create products for 5 seconds (stock).
         try {
-            Thread.sleep(5000);
+            Thread.sleep(1000);
         } catch (InterruptedException ex) {
             Logger.getLogger(StartProduction.class.getName()).log(Level.SEVERE, null, ex);
         }
