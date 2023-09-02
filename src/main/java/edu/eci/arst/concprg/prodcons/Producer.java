@@ -43,10 +43,16 @@ public class Producer extends Thread {
 
     private void produce() throws InterruptedException {
         synchronized (queue) {
-            dataSeed = dataSeed + rand.nextInt(100);
-            System.out.println("Producer added " + dataSeed);
-            queue.add(dataSeed);
+
+            while(this.queue.size() == this.stockLimit){
+                queue.wait();
+            }
+
             Thread.sleep(1000);
+            dataSeed = dataSeed + rand.nextInt(100);
+            queue.add(dataSeed);
+            System.out.println("Producer added " + dataSeed);
+            queue.notifyAll();
         }
 
     }

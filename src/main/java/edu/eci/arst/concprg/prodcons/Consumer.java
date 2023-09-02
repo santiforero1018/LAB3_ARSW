@@ -33,9 +33,15 @@ public class Consumer extends Thread {
     }
 
     private void consumir() throws InterruptedException {
-        int elem = queue.poll();
-        System.out.println("Consumer consumes " + elem);
-        Thread.sleep(1000);
+        synchronized (queue) {
+            while (queue.isEmpty()) {
+                queue.wait();
+            }
+            Thread.sleep(1000);
+            int elem = queue.poll();
+            System.out.println("Consumer consumes " + elem);
+            queue.notifyAll();
+        }
 
     }
 }
