@@ -73,15 +73,13 @@ public class Immortal extends Thread {
             updateCallback.processReport("Fight: " + this + " vs " + i2 + "\n");
         } else {
             updateCallback.processReport(this + " says:" + i2 + " is already dead!\n");
-
         }
-
     }
 
     public void stopIm() throws InterruptedException {
-        synchronized (immortalsPopulation) {
+        synchronized (updateCallback) {
             try {
-                immortalsPopulation.wait();
+                updateCallback.wait();
             } catch (Exception e) {
                 // TODO: handle exception
                 e.printStackTrace();

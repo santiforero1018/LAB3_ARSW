@@ -26,8 +26,7 @@ public class ControlFrame extends JFrame {
 
     private static final int DEFAULT_IMMORTAL_HEALTH = 100;
     private static final int DEFAULT_DAMAGE_VALUE = 10;
-
-   
+    private static boolean iterar;
 
     private JPanel contentPane;
 
@@ -44,10 +43,12 @@ public class ControlFrame extends JFrame {
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
+                iterar = true;
                 try {
+
                     ControlFrame frame = new ControlFrame();
                     frame.setVisible(true);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -94,10 +95,11 @@ public class ControlFrame extends JFrame {
                 /*
                  * COMPLETAR
                  */
+                iterar = false;
                 int sum = 0;
                 for (Immortal im : immortals) {
                     sum += im.getHealth();
-                    im.setRunning(false);
+                    im.setRunning(iterar);
                 }
 
                 statisticsLabel.setText("<html>" + immortals.toString() + "<br>Health sum:" + sum);
@@ -110,14 +112,13 @@ public class ControlFrame extends JFrame {
 
         btnResume.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                
-                for (Immortal inmortal : immortals) inmortal.setRunning(true);
-                synchronized (immortals) {
-                    immortals.notifyAll();
-                }
 
+                iterar = true;
+                for (Immortal inmortal : immortals) inmortal.setRunning(iterar);
+                    synchronized (immortals) {
+                        immortals.notifyAll();
+                    }
                 System.out.println("pelea reanudada!");
-
             }
         });
 
@@ -187,8 +188,10 @@ class TextAreaUpdateReportCallback implements ImmortalUpdateReportCallback {
         // move scrollbar to the bottom
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
+
                 JScrollBar bar = jsp.getVerticalScrollBar();
                 bar.setValue(bar.getMaximum());
+
             }
         });
 
