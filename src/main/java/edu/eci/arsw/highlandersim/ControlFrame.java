@@ -48,7 +48,6 @@ public class ControlFrame extends JFrame {
                 try {
                     ControlFrame frame = new ControlFrame();
                     frame.setVisible(true);
-                    
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
