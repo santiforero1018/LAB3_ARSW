@@ -26,7 +26,7 @@ public class ControlFrame extends JFrame {
 
     private static final int DEFAULT_IMMORTAL_HEALTH = 100;
     private static final int DEFAULT_DAMAGE_VALUE = 10;
-    // private static boolean iterar;
+    
 
     private JPanel contentPane;
 
@@ -108,7 +108,10 @@ public class ControlFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 for (Immortal im : immortals) {
-                    im.resumes();
+                    im.setPausa(false);
+                }
+                synchronized(immortals){
+                    immortals.notifyAll();
                 }
             }
         });

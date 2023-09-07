@@ -39,9 +39,6 @@ public class Immortal extends Thread {
     public void run() {
 
         while (health > 0 && !stop) {
-            if (pausa) {
-                this.pasueIM();
-            }
 
             Immortal im;
 
@@ -65,39 +62,30 @@ public class Immortal extends Thread {
             }
 
             if (pausa) {
-                synchronized (im) {
-                    try {
-                        im.wait();
-
-                    } catch (InterruptedException e) {
-
-                        e.printStackTrace();
-                    }
-                }
+                this.pasueIM();
             }
 
         }
-        
+        //this.immortalsDead.add(this);
+        //this.immortalsPopulation.remove(this);
         this.pasueIM();
 
     }
 
     public void fight(Immortal i2) {
-
-        synchronized (immortalsPopulation) {
-            if (i2.getHealth() > 0) {
-                i2.changeHealth(i2.getHealth() - defaultDamageValue);
-                this.health += defaultDamageValue;
-                updateCallback.processReport("Fight: " + this + " vs " + i2 + "\n");
-            } else {
-                updateCallback.processReport(this + " says:" + i2 + " is already dead!\n");
+        synchronized ((immortalsPopulation.indexOf(i2) < immortalsPopulation.indexOf(this))?i2:this) {
+            synchronized((immortalsPopulation.indexOf(i2) > immortalsPopulation.indexOf(this))?i2:this){
+                if (i2.getHealth() > 0) {
+                    i2.changeHealth(i2.getHealth() - defaultDamageValue);
+                    this.health += defaultDamageValue;
+                    updateCallback.processReport("Fight: " + this + " vs " + i2 + "\n");
+                } else {
+                    updateCallback.processReport(this + " says:" + i2 + " is already dead!\n");
+                    
+                }
             }
+            
         }
-    }
-
-    public synchronized void resumes() {
-        pausa = false;
-        notifyAll();
     }
 
     public void pasueIM() {
